@@ -29,7 +29,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, "public")));
 
 app.use(mongoSanitize());
 app.use(helmet());
@@ -41,10 +40,18 @@ const limiter = rateLimit({
 app.use(limiter);
 app.use(hpp());
 app.use(cors());
-//app.use("/", indexRouter);
+
+//static folder
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use("/api/v1/notebooks", notebooksRouter);
 app.use("/api/v1/todos", todosRouter);
 app.use("/api/v1/auth", authRouter);
+
+//static folder
+app.use(express.static(path.join(__dirname, "public")));
+//Handle spa
+app.get("/.*/", (req, res) => res.sendFile(__dirname + "/public/index.html"));
 
 app.use(errorHandler);
 
