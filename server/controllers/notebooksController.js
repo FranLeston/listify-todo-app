@@ -14,6 +14,20 @@ exports.getNotebooks = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Get all Notebooks of User logged in
+// @route   GET /api/v1/Notebooks/
+// @access  Public
+exports.getNotebooksByUserId = asyncHandler(async (req, res, next) => {
+  const notebooks = await Notebook.find({ user: req.user._id })
+    .populate("todos")
+    .sort("-created_at");
+  res.status(200).json({
+    success: true,
+    count: notebooks.length,
+    data: notebooks,
+  });
+});
+
 // @desc    Get single notebook
 // @route   GET /api/v1/Notebooks/:id
 // @access  Public
@@ -23,6 +37,26 @@ exports.getNotebook = asyncHandler(async (req, res, next) => {
   if (!notebook) {
     return next(
       new ErrorResponse(`NoteBook not found with id of ${req.params.id}`, 404)
+    );
+  }
+  res.status(200).json({
+    success: true,
+    data: notebook,
+  });
+});
+
+// @desc    Get single notebook
+// @route   GET /api/v1/Notebooks/name/:name
+// @access  Public
+exports.getNotebookByName = asyncHandler(async (req, res, next) => {
+  const notebook = await Notebook.findOne({ notebook_name: req.params.name });
+
+  if (!notebook) {
+    return next(
+      new ErrorResponse(
+        `NoteBook not found with name of ${req.params.name}`,
+        404
+      )
     );
   }
   res.status(200).json({

@@ -12,7 +12,9 @@ exports.getTodos = asyncHandler(async (req, res, next) => {
   let query;
 
   if (req.params.notebookId) {
-    query = Todo.find({ notebook: req.params.notebookId });
+    query = Todo.find({ notebook: req.params.notebookId })
+      .populate("notebook")
+      .sort({ star: -1, created_at: -1 });
   } else {
     query = Todo.find().populate("notebook");
   }

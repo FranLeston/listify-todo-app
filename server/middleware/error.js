@@ -20,7 +20,7 @@ const errorHandler = (err, req, res, next) => {
 
   //Dup Key
   if (err.code === 11000) {
-    const message = "Duplicate field value entered";
+    const message = "Field is already taken.";
     error = new ErrorResponse(message, 400);
   }
 

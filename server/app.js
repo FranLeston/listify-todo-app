@@ -1,5 +1,4 @@
 require("dotenv").config();
-console.log("the env", process.env.MONGO_URI);
 
 const express = require("express");
 const path = require("path");
@@ -51,8 +50,13 @@ app.use("/api/v1/auth", authRouter);
 //static folder
 app.use(express.static(path.join(__dirname, "public")));
 //Handle spa
-app.get("/.*/", (req, res) => res.sendFile(__dirname + "/public/index.html"));
-
+app.all("*", (_req, res) => {
+  try {
+    res.sendFile(__dirname + "/public/index.html");
+  } catch (error) {
+    res.json({ success: false, message: "Something went wrong" });
+  }
+});
 app.use(errorHandler);
 
 module.exports = app;
