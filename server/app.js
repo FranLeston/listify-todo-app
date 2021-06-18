@@ -13,7 +13,6 @@ const hpp = require("hpp");
 const logger = require("morgan");
 const errorHandler = require("./middleware/error");
 const connectDB = require("./config/db");
-const colors = require("colors");
 
 //Connect to DB
 connectDB();
